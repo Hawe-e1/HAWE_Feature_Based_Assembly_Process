@@ -13,22 +13,22 @@
                     <feature name="Controller/81" assembly_action="Assemble Controller _"/>
                 </alt>
                 <alt abstract="true" mandatory="true" name="ControllerSpring" merge_assembly="Controller">
-                    <feature name="2" assembly_action="Assemble Controller Spring_"/>
-                    <feature name="5"/>
-                    <feature name="7"/>
-                    <feature name="9"/>
+                    <feature name="ControllerSpring/2" assembly_action="Assemble Controller Spring _"/>
+                    <feature name="ControllerSpring/5" assembly_action="Assemble Controller Spring _"/>
+                    <feature name="ControllerSpring/7" assembly_action="Assemble Controller Spring _"/>
+                    <feature name="ControllerSpring/9" assembly_action="Assemble Controller Spring _"/>
                 </alt>
                 <alt abstract="true" mandatory="true" name="ShutleValve">
-                    <feature name="WV/-"/>
-                    <feature name="WV/W1"/>
-                    <feature name="WV/W3"/>
+                    <feature name="WV/-" assembly_action="Assemble WV _"/>
+                    <feature name="WV/W1" assembly_action="Assemble WV _"/>
+                    <feature name="WV/W3" assembly_action="Assemble WV _"/>
                 </alt>
                 <alt abstract="true" name="PressureRelief">
-                    <feature name="A." assembly_action="assemble DBV A."/>
-                    <feature name="B."/>
-                    <feature name="A.B."/>
-                    <feature name="AB"/>
-                    <feature name="C"/>
+                    <feature name="DBV/A." assembly_action="Assemble DBV _"/>
+                    <feature name="DBV/B." assembly_action="Assemble DBV _"/>
+                    <feature name="DBV/A.B." assembly_action="Assemble DBV _"/>
+                    <feature name="DBV/AB" assembly_action="Assemble DBV _"/>
+                    <feature name="DBV/C" assembly_action="Assemble DBV _"/>
                 </alt>
                 <alt abstract="true" mandatory="true" name="Actuation">
                     <alt abstract="true" name="AG1">
@@ -82,10 +82,10 @@
                     </alt>
                 </alt>
                 <alt abstract="true" name="Magnet">
-                    <feature name="G24"/>
-                    <feature name="X12"/>
-                    <feature name="AMP24"/>
-                    <feature name="S12"/>
+                    <feature name="Magnet/G24" assembly_action="Assemble Magnet _"/>
+                    <feature name="Magnet/X12" assembly_action="Assemble Magnet _"/>
+                    <feature name="Magnet/AMP24" assembly_action="Assemble Magnet _"/>
+                    <feature name="Magnet/S12" assembly_action="Assemble Magnet _"/>
                 </alt>
             </and>
         </and>
