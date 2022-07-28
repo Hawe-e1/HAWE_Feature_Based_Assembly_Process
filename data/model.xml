@@ -4,16 +4,16 @@
         <and abstract="true" mandatory="true" name="PSx">
             <feature abstract="true" name="ConnectorBlock"/>
             <and abstract="true" mandatory="true" name="SpoolBlock">
-                <alt abstract="true" mandatory="true" name="Controller">
-                    <feature name="Controller/-" assembly_action=""/>
-                    <feature name="D"/>
-                    <feature name="E"/>
-                    <feature name="I"/>
-                    <feature name="L"/>
-                    <feature name="81"/>
+                <alt abstract="true" mandatory="true" name="Controller" merge_assembly="ControllerSpring">
+                    <feature name="Controller/-" assembly_action="Assemble Controller _"/>
+                    <feature name="Controller/D" assembly_action="Assemble Controller _"/>
+                    <feature name="Controller/E" assembly_action="Assemble Controller _"/>
+                    <feature name="Controller/I" assembly_action="Assemble Controller _"/>
+                    <feature name="Controller/L" assembly_action="Assemble Controller _"/>
+                    <feature name="Controller/81" assembly_action="Assemble Controller _"/>
                 </alt>
-                <alt abstract="true" mandatory="true" name="ControllerSpring">
-                    <feature name="2"/>
+                <alt abstract="true" mandatory="true" name="ControllerSpring" merge_assembly="Controller">
+                    <feature name="2" assembly_action="Assemble Controller Spring_"/>
                     <feature name="5"/>
                     <feature name="7"/>
                     <feature name="9"/>
