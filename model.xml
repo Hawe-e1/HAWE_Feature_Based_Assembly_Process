@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<featureModel>
+    <struct>
+        <and abstract="true" mandatory="true" name="PSx">
+            <feature abstract="true" name="ConnectorBlock"/>
+            <and abstract="true" mandatory="true" name="SpoolBlock">
+                <alt abstract="true" mandatory="true" name="Controller">
+                    <feature name="-"/>
+                    <feature name="D"/>
+                    <feature name="E"/>
+                    <feature name="I"/>
+                    <feature name="L"/>
+                    <feature name="81"/>
+                </alt>
+                <alt abstract="true" mandatory="true" name="ControllerSpring">
+                    <feature name="2"/>
+                    <feature name="5"/>
+                    <feature name="7"/>
+                    <feature name="9"/>
+                </alt>
+                <alt abstract="true" mandatory="true" name="ShutleValve">
+                    <feature name="WV/-"/>
+                    <feature name="WV/W1"/>
+                    <feature name="WV/W3"/>
+                </alt>
+                <alt abstract="true" name="PressureRelief">
+                    <feature name="A."/>
+                    <feature name="B."/>
+                    <feature name="A.B."/>
+                    <feature name="AB"/>
+                    <feature name="C"/>
+                </alt>
+                <alt abstract="true" mandatory="true" name="Actuation">
+                    <alt abstract="true" name="AG1">
+                        <feature name="AG1/empty"/>
+                        <feature name="AG1/E"/>
+                        <feature name="AG1/E0"/>
+                    </alt>
+                    <alt abstract="true" name="AG2">
+                        <feature name="AG2/P"/>
+                        <feature name="AG2/empty"/>
+                    </alt>
+                    <alt abstract="true" name="AG3">
+                        <feature name="AG3/empty"/>
+                        <feature name="AG3/EOZ"/>
+                        <feature name="AG3/H"/>
+                        <feature name="AG3/F"/>
+                        <feature name="AG3/T"/>
+                    </alt>
+                    <alt abstract="true" name="AG4">
+                        <feature name="AG4/empty"/>
+                        <feature name="AG4/I"/>
+                        <feature name="AG4/M"/>
+                        <feature name="AG4/MM"/>
+                    </alt>
+                    <alt abstract="true" name="AG5">
+                        <feature name="AG5/empty"/>
+                        <feature name="AG5/A"/>
+                        <feature name="AG5/C"/>
+                        <feature name="AG5/D"/>
+                    </alt>
+                    <alt abstract="true" name="AG6">
+                        <feature name="AG6/empty"/>
+                        <feature name="AG6/7"/>
+                        <feature name="AG6/8"/>
+                        <feature name="AG6/9"/>
+                    </alt>
+                    <alt abstract="true" name="AG7">
+                        <feature name="AG7/empty"/>
+                        <feature name="AG7/UNF"/>
+                    </alt>
+                    <alt abstract="true" name="AG8">
+                        <feature name="AG8/empty"/>
+                        <feature name="AG8/G"/>
+                        <feature name="AG8/S"/>
+                        <feature name="AG8/D"/>
+                        <feature name="AG8/VCH"/>
+                        <feature name="AG8/WA"/>
+                        <feature name="AG8/UNF"/>
+                        <feature name="AG8/CAN"/>
+                        <feature name="AG8/CANL"/>
+                    </alt>
+                </alt>
+                <alt abstract="true" name="Magnet">
+                    <feature name="G24"/>
+                    <feature name="X12"/>
+                    <feature name="AMP24"/>
+                    <feature name="S12"/>
+                </alt>
+            </and>
+        </and>
+    </struct>
+    <constraints>
+        <rule>
+            <imp>
+                <var>81</var>
+                <not>
+                    <var>WV/W1</var>
+                </not>
+            </imp>
+        </rule>
+        <rule>
+            <imp>
+                <var>Controller</var>
+                <var>ControllerSpring</var>
+            </imp>
+        </rule>
+    </constraints>
+</featureModel>
