@@ -1,0 +1,22 @@
+{
+    "assemble DBV A.":
+    [
+        "Takeout DBV A",
+        "ScrewDBV A"
+    ],
+
+    "assemble DBV B.":
+    [
+        "Takeout DBV B",
+        "ScrewDBV B"
+    ],
+    "assemble WV W1":
+    [
+        "Take out WV",
+        "Take out bullet",
+        "Put the bullet into the block",
+        "Screw in WV"
+    ]
+
+
+}

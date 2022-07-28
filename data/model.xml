@@ -5,7 +5,7 @@
             <feature abstract="true" name="ConnectorBlock"/>
             <and abstract="true" mandatory="true" name="SpoolBlock">
                 <alt abstract="true" mandatory="true" name="Controller">
-                    <feature name="-"/>
+                    <feature name="Controller/-" assembly_action=""/>
                     <feature name="D"/>
                     <feature name="E"/>
                     <feature name="I"/>
@@ -24,7 +24,7 @@
                     <feature name="WV/W3"/>
                 </alt>
                 <alt abstract="true" name="PressureRelief">
-                    <feature name="A."/>
+                    <feature name="A." assembly_action="assemble DBV A."/>
                     <feature name="B."/>
                     <feature name="A.B."/>
                     <feature name="AB"/>
@@ -106,4 +106,29 @@
             </imp>
         </rule>
     </constraints>
+     <order_constraints>
+        <rule>
+            <imp>
+                <and>
+                    <var>Actuation/G1/E0</var>
+                    <var>Actuation/G8/CAN</var>
+                </and>
+                <var>7,2,6,1,3,4,5,8</var>>
+            </imp>
+            <imp>
+                <or>
+                    <var>Controller/L</var>
+                    <var>Controller/I</var>
+                </or>
+                <var>7,2,6,1,3,4,5,8</var>>
+            </imp>
+            <imp>
+                <and>
+                    <var>Actuation/G1/E</var>
+                    <var>Actuation/G5/A</var>
+                </and>
+                <var>7,2,6,1,3,4,5,8</var>>
+            </imp>
+        </rule>
+     </order_constraints>
 </featureModel>
