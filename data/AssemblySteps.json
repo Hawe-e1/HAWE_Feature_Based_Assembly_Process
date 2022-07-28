@@ -1,22 +1,99 @@
 {
-    "assemble DBV A.":
+    "assemble DBV _.":
     [
-        "Takeout DBV A",
-        "ScrewDBV A"
+        "Takeout DBV _",
+        "Screw DBV _"
     ],
 
-    "assemble DBV B.":
+    "assemble DBV _":
     [
-        "Takeout DBV B",
-        "ScrewDBV B"
+        "Takeout DBV _",
+        "Screw DBV _"
     ],
-    "assemble WV W1":
+
+    "assemble DBV _._.":
     [
+        "Takeout DBV _",
+        "Screw DBV _",
+        "Takeout DBV _",
+        "Screw DBV _"
+    ],
+
+    "assemble DBV __":
+    [
+        "Missing Info for DBV AB"
+    ],
+
+    "assemble controller _%% assemble controller _":
+    [
+        "Take out controller _",
+        "Take out controller spring _",
+        "Insert controller spring _ in the controller",
+        "Join both components into the block"
+    ],
+
+    "assemble WV _":
+    [
+        "Missing Differences between features",
         "Take out WV",
         "Take out bullet",
         "Put the bullet into the block",
         "Screw in WV"
+    ],
+
+    "spring set /_":
+    [
+        "Missing Differences between features",
+        "Take out spring",
+        "Take out disc1",
+        "Take out disc2",
+        "Join component"
+    ],
+
+    "spring set screw /_":
+    [
+        "Missing Differences between features",
+        "Take out can",
+        "Take out screw",
+        "Put on spring set",
+        "Insert spring set screw",
+        "Screw down screw"
+    ],
+
+    "housing /_":
+    [
+        "Missing Differences between features",
+        "Take out housing",
+        "Take out screws",
+        "Insert screw",
+        "Screw down screw pos. 1",
+        "Screw down screw pos. 2",
+        "Screw down screw pos. 3",
+        "Screw down screw pos. 4"
+        
+    ],
+    
+    "spring cover /_":
+    [
+        "Missing Differences between features",
+        "Take out o-ring",
+        "Take out spring cover",
+        "Insert o-ring",
+        "Put on spring cover",
+        "Take out screws",
+        "Screw down screw pos. 1",
+        "Screw down screw pos. 2",
+        "Screw down screw pos. 3",
+        "Screw down screw pos. 4"        
+    ],
+
+    "assemble magnet _":
+    [
+        "Take out magnet",
+        "Put on magnet",
+        "Take out screw",
+        "Screw down screw pos. 1",
+        "Screw down screw pos. 2",
+        "Screw down screw pos. 3"       
     ]
-
-
 }
