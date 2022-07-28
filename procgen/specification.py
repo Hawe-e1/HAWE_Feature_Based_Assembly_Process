@@ -1,9 +1,16 @@
 
 from dataclasses import dataclass
-
+import enum
 
 
 
 @dataclass
 class Specification:
-    pass
+    actuator : str
+    controller_spring : str
+    dbv : str
+    wv : str
+    actuation : str
+    magnet : str
+    def get_boolean_representaion(self):  # some return type, depends on the library used for CNF
+        pass
