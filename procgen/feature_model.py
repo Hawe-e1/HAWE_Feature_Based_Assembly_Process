@@ -1,5 +1,5 @@
-import specification
-import product
+import procgen.product as product
+import procgen.specification as specification
 
 import xml.etree.ElementTree
 
