@@ -295,10 +295,10 @@
     [
         [
             "imp",
-            {"var1" : "81"},
+            {"var1" : "Controller/81"},
             "not",
             [
-                {"var2" : "WV/W1"}
+                {"var2" : "ShutleValve/W1"}
             ]
         ],
         [
