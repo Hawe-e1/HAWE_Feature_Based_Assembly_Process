@@ -1,0 +1,440 @@
+{
+    "structure" :
+    {
+        "PSx":
+        {
+            "meta" :
+            {"type" : "and", "abstract" : true, "mandatory" : true},
+            "SpoolBlock":
+            {
+                "meta" : {"type" : "and", "abstract" : true, "mandatory" : true},
+                "Controller":
+                {
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true, "merge_assembly" : "ControllerSpring"},
+                    "-":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    },
+                    "D":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    },
+                    "E":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    },
+                    "I":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    },
+                    "L":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    },
+                    "81":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller _"}
+                    }
+                },
+                "ControllerSpring":
+                {
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true, "merge_assembly" : "Controller"},
+                    "2" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller Spring _"}
+                    },
+                    "5" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller Spring _"}
+                    },
+                    "7" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller Spring _"}
+                    },
+                    "9" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble Controller Spring _"}
+                    }
+                },
+                "ShutleValve":
+                {
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                    "-" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble WV _"}
+                    },
+                    "W1" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble WV _"}
+                    },
+                    "W3" : 
+                    {
+                        "meta" : {"assembly_action" : "Assemble WV _"}
+                    }
+                },
+                "PressureRelief":
+                {
+                    "meta" : {"type" : "alt", "abstract" : true},
+                    "A.":
+                    {
+                        "meta" : {"assembly_action" : "Assemble DBV _"}
+                    },
+                    "B.":
+                    {
+                        "meta" : {"assembly_action" : "Assemble DBV _"}
+                    },
+                    "A.B.":
+                    {
+                        "meta" : {"assembly_action" : "Assemble DBV _"}
+                    },
+                    "AB":
+                    {
+                        "meta" : {"assembly_action" : "Assemble DBV _"}
+                    },
+                    "C":
+                    {
+                        "meta" : {"assembly_action" : "Assemble DBV _"}
+                    }
+                },
+                "Actuation":
+                {
+                    "meta" : {"type" : "and", "abstract" : true, "mandatory" : true},
+                    "AG1":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "E":
+                        {
+                            "meta" : {}
+                        },
+                        "E0":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG2":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "P":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG3":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "EOZ":
+                        {
+                            "meta" : {}
+                        },
+                        "H":
+                        {
+                            "meta" : {}
+                        },
+                        "F":
+                        {
+                            "meta" : {}
+                        },
+                        "T":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG4":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "I":
+                        {
+                            "meta" : {}
+                        },
+                        "M":
+                        {
+                            "meta" : {}
+                        },
+                        "MM":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG5":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "A":
+                        {
+                            "meta" : {}
+                        },
+                        "C":
+                        {
+                            "meta" : {}
+                        },
+                        "D":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG6":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "7":
+                        {
+                            "meta" : {}
+                        },
+                        "8":
+                        {
+                            "meta" : {}
+                        },
+                        "9":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG7":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "UNF":
+                        {
+                            "meta" : {}
+                        }
+                    },
+                    "AG8":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "G":
+                        {
+                            "meta" : {}
+                        },
+                        "S":
+                        {
+                            "meta" : {}
+                        },
+                        "D":
+                        {
+                            "meta" : {}
+                        },
+                        "VCH":
+                        {
+                            "meta" : {}
+                        },
+                        "WA":
+                        {
+                            "meta" : {}
+                        },
+                        "UNF":
+                        {
+                            "meta" : {}
+                        },
+                        "CAN":
+                        {
+                            "meta" : {}
+                        },
+                        "CANL":
+                        {
+                            "meta" : {}
+                        }
+                    }
+                },
+                "Magnet":
+                {
+                    "meta" : {"type" : "alt", "abstract" : true},
+                    "G24":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Magnet _"}
+                    },
+                    "X12":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Magnet _"}
+                    },
+                    "AMP24":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Magnet _"}
+                    },
+                    "S12":
+                    {
+                        "meta" : {"assembly_action" : "Assemble Magnet _"}
+                    }
+                }
+            },
+            "ConnectorBlock":
+            {
+                "meta":{"abstract" : true, "mandatory" : true}
+            }
+        }
+    },
+    "constraints" : 
+    [
+        [
+            "imp",
+            {"var1" : "81"},
+            "not",
+            [
+                {"var2" : "WV/W1"}
+            ]
+        ],
+        [
+            "imp",
+            {"var1" : "Controller"},
+            {"var2" : "ControllerSpring"}
+        ]
+    ],
+    "order_constraints":
+    [
+        {
+            "expr" :
+            [
+                "and",
+                {"var1" : "Actuation/G1/E0"},
+                {"var2" : "Actuation/G8/CAN"}
+            ],
+            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+        },
+        {
+            "expr" :
+            [
+                "or",
+                {"var1" : "Controller/L"},
+                {"var2" : "Controller/I"}
+            ],
+            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+        },
+        {
+            "expr" :
+            [
+                "and",
+                {"var1" : "Actuation/G1/E"},
+                {"var2" : "Actuation/G5/A"}
+            ],
+            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+        }
+    ],
+    "assembly_steps" :
+    {
+        "assemble DBV _.":
+        [
+            "Takeout DBV _",
+            "Screw DBV _"
+        ],
+
+        "assemble DBV _":
+        [
+            "Takeout DBV _",
+            "Screw DBV _"
+        ],
+
+        "assemble DBV _._.":
+        [
+            "Takeout DBV _",
+            "Screw DBV _",
+            "Takeout DBV _",
+            "Screw DBV _"
+        ],
+
+        "assemble DBV __":
+        [
+            "Missing Info for DBV AB"
+        ],
+
+        "assemble controller _%% assemble controller _":
+        [
+            "Take out controller _",
+            "Take out controller spring _",
+            "Insert controller spring _ in the controller",
+            "Join both components into the block"
+        ],
+
+        "assemble WV _":
+        [
+            "Missing Differences between features",
+            "Take out WV",
+            "Take out bullet",
+            "Put the bullet into the block",
+            "Screw in WV"
+        ],
+
+        "spring set /_":
+        [
+            "Missing Differences between features",
+            "Take out spring",
+            "Take out disc1",
+            "Take out disc2",
+            "Join component"
+        ],
+
+        "spring set screw /_":
+        [
+            "Missing Differences between features",
+            "Take out can",
+            "Take out screw",
+            "Put on spring set",
+            "Insert spring set screw",
+            "Screw down screw"
+        ],
+
+        "housing /_":
+        [
+            "Missing Differences between features",
+            "Take out housing",
+            "Take out screws",
+            "Insert screw",
+            "Screw down screw pos. 1",
+            "Screw down screw pos. 2",
+            "Screw down screw pos. 3",
+            "Screw down screw pos. 4"
+            
+        ],
+        
+        "spring cover /_":
+        [
+            "Missing Differences between features",
+            "Take out o-ring",
+            "Take out spring cover",
+            "Insert o-ring",
+            "Put on spring cover",
+            "Take out screws",
+            "Screw down screw pos. 1",
+            "Screw down screw pos. 2",
+            "Screw down screw pos. 3",
+            "Screw down screw pos. 4"        
+        ],
+
+        "assemble magnet _":
+        [
+            "Take out magnet",
+            "Put on magnet",
+            "Take out screw",
+            "Screw down screw pos. 1",
+            "Screw down screw pos. 2",
+            "Screw down screw pos. 3"
+        ]
+    }
+}
