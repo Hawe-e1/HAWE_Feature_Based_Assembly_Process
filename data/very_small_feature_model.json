@@ -16,16 +16,6 @@
     },
     "constraints" : 
     [
-        [
-            "exc",
-            "Controller/81",
-            "ShutleValve/W1"
-        ],
-        [
-            "req",
-            "Controller",
-            "ControllerSpring"
-        ]
     ],
     "order_constraints":
     [
@@ -33,8 +23,8 @@
             "expr" :
             [
                 "and",
-                {"var1" : "Actuation/G1/E0"},
-                {"var2" : "Actuation/G8/CAN"}
+                "Actuation/G1/E0",
+                "Actuation/G8/CAN"
             ],
             "order" : [7, 2, 6, 1, 3, 4, 5, 8]
         },
@@ -42,8 +32,8 @@
             "expr" :
             [
                 "or",
-                {"var1" : "Controller/L"},
-                {"var2" : "Controller/I"}
+                "Controller/L",
+                "Controller/I"
             ],
             "order" : [7, 2, 6, 1, 3, 4, 5, 8]
         },
@@ -51,8 +41,8 @@
             "expr" :
             [
                 "and",
-                {"var1" : "Actuation/G1/E"},
-                {"var2" : "Actuation/G5/A"}
+                "Actuation/G1/E",
+                "Actuation/G5/A"
             ],
             "order" : [7, 2, 6, 1, 3, 4, 5, 8]
         }
