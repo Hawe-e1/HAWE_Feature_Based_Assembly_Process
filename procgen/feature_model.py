@@ -1,4 +1,3 @@
-from typing import List
 import procgen.product as product
 import procgen.specification as specification
 import procgen.utils as utils
@@ -10,9 +9,9 @@ import sympy.logic.boolalg as boolalg
 import sympy.logic.inference as inference
 
 class FeatureModel:
-    def __init__(self, model_path: str):
+    def __init__(self, feature_model):
         self.all_symbols = []
-        feature_model = utils.load_json_from_file_path(model_path)
+        
         self.structure = feature_model["structure"]
         self.constraints = feature_model["constraints"]
         self.order_constraints = feature_model["order_constraints"]
