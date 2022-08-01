@@ -1,56 +1,74 @@
 {
-    "structure" :
-    {
-        "A":
-        {
-            "meta" : {"type" : "and", "abstract" : true, "mandatory":true},
-            "nodes" : {
-                "B":
-                {
-                    "meta" : {}
+    "structure": {
+        "A": {
+            "meta": {
+                "type": "and",
+                "abstract": true,
+                "mandatory": true
+            },
+            "nodes": {
+                "B": {
+                    "meta": {}
                 },
-                "C":
-                {
-                    "meta" : {}
+                "C": {
+                    "meta": {}
                 }
             }
         }
     },
-    "constraints" : 
-    [
-    ],
-    "order_constraints":
-    [
+    "constraints": [],
+    "order_constraints": [
         {
-            "expr" :
-            [
+            "expr": [
                 "and",
                 "Actuation/G1/E0",
                 "Actuation/G8/CAN"
             ],
-            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
         },
         {
-            "expr" :
-            [
+            "expr": [
                 "or",
                 "Controller/L",
                 "Controller/I"
             ],
-            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
         },
         {
-            "expr" :
-            [
+            "expr": [
                 "and",
                 "Actuation/G1/E",
                 "Actuation/G5/A"
             ],
-            "order" : [7, 2, 6, 1, 3, 4, 5, 8]
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
         }
     ],
-    "assembly_steps" :
-    {
-
-    }
+    "assembly_steps": {}
 }
