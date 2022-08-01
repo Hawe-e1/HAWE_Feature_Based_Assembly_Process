@@ -294,17 +294,14 @@
     "constraints" : 
     [
         [
-            "imp",
-            {"var1" : "Controller/81"},
-            "not",
-            [
-                {"var2" : "ShutleValve/W1"}
-            ]
+            "exc",
+            "Controller/81",
+            "ShutleValve/W1"
         ],
         [
-            "imp",
-            {"var1" : "Controller"},
-            {"var2" : "ControllerSpring"}
+            "req",
+            "Controller",
+            "ControllerSpring"
         ]
     ],
     "order_constraints":
