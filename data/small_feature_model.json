@@ -4,104 +4,137 @@
         "Actuation":
         {
             "meta" : {"type" : "and", "abstract" : true, "mandatory" : true},
-            "AG1":
+            "nodes" : 
             {
-                "meta" : {"type" : "and", "abstract" : true, "mandatory" : true},
-                "E":
+                "AG1":
                 {
-                    "meta" : {}
+                    "meta" : {"type" : "and", "abstract" : true, "mandatory" : true},
+                    "nodes" : 
+                    {
+                        "E":
+                        {
+                            "meta" : {}
+                        },
+                        "E0":
+                        {
+                            "meta" : {}
+                        }
+
+                    }
                 },
-                "E0":
+                    "AG2":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "nodes" : 
+                        {
+
+                            "empty":
+                            {
+                                "meta" : {}
+                            },
+                            "P":
+                            {
+                                "meta" : {}
+                            }
+                        }
+                    },
+                        "AG3":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "nodes" : 
+                        {
+
+                            "F":
+                            {
+                                "meta" : {}
+                            },
+                            "T":
+                            {
+                                "meta" : {}
+                            }
+                        }
+                    },
+                    "AG4":
+                    {
+                        "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                        "nodes" :
+                        {
+
+                            "empty":
+                            {
+                                "meta" : {}
+                            },
+                            "I":
+                            {
+                                "meta" : {}
+                            },
+                            "M":
+                            {
+                                "meta" : {}
+                            },
+                            "MM":
+                            {
+                                "meta" : {}
+                            }
+                        }
+                    },
+                        "AG5":
                 {
-                    "meta" : {}
-                }
-            },
-            "AG2":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "empty":
-                {
-                    "meta" : {}
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                    "nodes" :
+                    {
+
+                        "D":
+                        {
+                            "meta" : {}
+                        }
+                    }
                 },
-                "P":
+                "AG6":
                 {
-                    "meta" : {}
-                }
-            },
-            "AG3":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "F":
-                {
-                    "meta" : {}
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                    "nodes" : {
+
+                        "8":
+                        {
+                            "meta" : {}
+                        },
+                        "9":
+                        {
+                            "meta" : {}
+                        }
+                    }
                 },
-                "T":
+                "AG7":
                 {
-                    "meta" : {}
-                }
-            },
-            "AG4":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "empty":
-                {
-                    "meta" : {}
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                    "nodes" :
+                    {
+
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "UNF":
+                        {
+                            "meta" : {}
+                        }
+                    }
                 },
-                "I":
+                "AG8":
                 {
-                    "meta" : {}
-                },
-                "M":
-                {
-                    "meta" : {}
-                },
-                "MM":
-                {
-                    "meta" : {}
-                }
-            },
-            "AG5":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "D":
-                {
-                    "meta" : {}
-                }
-            },
-            "AG6":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "8":
-                {
-                    "meta" : {}
-                },
-                "9":
-                {
-                    "meta" : {}
-                }
-            },
-            "AG7":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "empty":
-                {
-                    "meta" : {}
-                },
-                "UNF":
-                {
-                    "meta" : {}
-                }
-            },
-            "AG8":
-            {
-                "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
-                "empty":
-                {
-                    "meta" : {}
-                },
-                "G":
-                {
-                    "meta" : {}
+                    "meta" : {"type" : "alt", "abstract" : true, "mandatory" : true},
+                    "nodes" : {
+
+                        "empty":
+                        {
+                            "meta" : {}
+                        },
+                        "G":
+                        {
+                            "meta" : {}
+                        }
+                    }
                 }
             }
         }

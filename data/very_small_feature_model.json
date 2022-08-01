@@ -4,13 +4,15 @@
         "A":
         {
             "meta" : {"type" : "and", "abstract" : true, "mandatory":true},
-            "B":
-            {
-                "meta" : {}
-            },
-            "C":
-            {
-                "meta" : {}
+            "nodes" : {
+                "B":
+                {
+                    "meta" : {}
+                },
+                "C":
+                {
+                    "meta" : {}
+                }
             }
         }
     },
