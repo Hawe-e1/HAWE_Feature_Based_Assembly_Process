@@ -4,7 +4,8 @@ import procgen
 import sympy
 
 if __name__ == "__main__":
-    feature_model = procgen.utils.load_json_from_file_path("data/very_small_feature_model.json")
+    feature_model_json = procgen.utils.load_json_from_file_path("data/small_feature_model.json")
+    feature_model = procgen.data_types.FeatureModelType(**feature_model_json)
     fm = procgen.feature_model.FeatureModel(feature_model)
     print(fm.check_fm_satisfiability())
     print()

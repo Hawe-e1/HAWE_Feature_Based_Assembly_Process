@@ -1,8 +1,7 @@
 from typing import Dict, List
+from procgen import data_types
 import procgen.product as product
 import procgen.specification as specification
-import procgen.utils as utils
-from procgen.feature_model_type import FeatureModelType
 
 import re
 import sympy
@@ -12,16 +11,16 @@ import sympy.logic.inference as inference
 
 
 class FeatureModel:
-    def __init__(self, feature_model):
+    def __init__(self, feature_model: data_types.FeatureModelType):
         self.all_symbols = []
 
-        self.structure = feature_model["structure"]
-        self.constraints: List[List[str]] = feature_model["constraints"]
+        self.structure = feature_model.structure
+        self.constraints: List[List[str]] = feature_model.constraints
         self.order_constraints: List[
             Dict[str, List[int] | List[str | Dict[str, str]]]
-        ] = feature_model["order_constraints"]
-        self.assembly_steps: Dict[str, List[str]] = feature_model["assembly_steps"]
-        root = list(feature_model["structure"].keys())
+        ] = feature_model.order_constraints
+        self.assembly_steps: Dict[str, List[str]] = feature_model.assembly_steps
+        root = list(feature_model.structure.keys())
         assert (
             len(root) == 1
         ), "There is more than one root of the feature model which makes it ambigous."
@@ -52,20 +51,19 @@ class FeatureModel:
             return boolalg.Not(boolalg.And(x, y))
 
     def create_bool_from_structure(self, root, parent_name: str):
-        if "abstract" in root["meta"] and root["meta"]["abstract"]:
+        if "abstract" in root.meta and root.meta["abstract"]:
             parent_symbol = sympy.symbols(parent_name)
             symb = []
-            nodes = list(root.keys())
-            nodes.remove("meta")
+            nodes = list(root.nodes.keys())
             for n in nodes:
                 name = parent_name + "/" + n
-                symb.append(self.create_bool_from_structure(root[n], name))
+                symb.append(self.create_bool_from_structure(root.nodes[n], name))
             sub_expr1 = boolalg.false
             for s in symb:
                 sub_expr1 = boolalg.Or(sub_expr1, s)
             sub_expr = boolalg.Equivalent(sub_expr1, parent_symbol)
 
-            root_node_type = root["meta"]["type"]
+            root_node_type = root.meta["type"]
             if root_node_type == "alt":
                 sub_expr2 = boolalg.true
                 for i in range(len(symb)):
@@ -79,7 +77,7 @@ class FeatureModel:
             else:
                 pass
 
-            mandatory = "mandatory" in root["meta"] and root["meta"]["mandatory"]
+            mandatory = "mandatory" in root.meta and root.meta["mandatory"]
             for s in symb:
                 if mandatory:
                     sub_expr = boolalg.And(
@@ -97,7 +95,7 @@ class FeatureModel:
     def check_fm_satisfiability(self) -> bool:
         return True if inference.satisfiable(self.boolean_fm) else False
 
-    def check_specification(self, specification: specification.Specification) -> bool:
+    def check_spec_satisfy(self, specification: data_types.SpecifiationType) -> bool:
         # self.boolean_representaion
         # evaluate boolean expression if it is satisfied by the specification
 
