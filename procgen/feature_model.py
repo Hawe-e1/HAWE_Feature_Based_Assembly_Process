@@ -16,20 +16,6 @@ class FeatureModel:
         self.constraints = feature_model["constraints"]
         self.order_constraints = feature_model["order_constraints"]
 
-        #tree = ET.parse(model_path)
-        #root = tree.getroot()
-        #
-        #for neighbor in root.iter('alt'):
-        #    print(neighbor.get('name'))
-        #    if neighbor.get('merge_assembly'):
-        #        print(neighbor.get('merge_assembly'))
-        #    for feature in neighbor:
-        #        print(feature.attrib)
-
-
-
-
-
     def create_boolean_expression_from_feature_model(self): # some return type, depends on the library used for CNF
         pass
 
@@ -45,11 +31,9 @@ class FeatureModel:
 
     def parse_type_code(self, type_code:str) -> specification.Specification:
         groups = re.split(r"\s|/|(?!\s)-(?!\s)", type_code)
-        print(groups)
         spec = specification.Specification()
         spec.controller = groups.pop(0)
         spec.controller_spring = groups.pop(0)
-
         pr = self.structure["PSx"]["SpoolBlock"]["PressureRelief"]
         for _ in range(2):
             for feature in pr:
@@ -62,9 +46,6 @@ class FeatureModel:
         spec.wv = groups.pop(0)
         spec.actuation = groups.pop(0)
         spec.magnet = groups.pop(0) if groups else ""
-        
-        #utils.pprint_dict(pr)
-
         return spec
 
 
