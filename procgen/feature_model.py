@@ -25,17 +25,18 @@ class FeatureModel:
 
         self.structure_root_name = roots[0]
         self.boolean_fm = self.create_bool_from_fm(self.structure_root_name)
-        self.num_feature_groups = self.count_number_of_feature_groups(self.structure[self.structure_root_name])
-        print(self.num_feature_groups)
+        self.num_feature_groups = self.count_number_of_feature_groups(
+            self.structure[self.structure_root_name]
+        )
 
-    def create_bool_from_fm(self, root:str):
+    def create_bool_from_fm(self, root: str):
         expr = self.create_bool_from_structure(self.structure[root], root)
         for constraint_dict in self.constraints:
             constraint_expr = self.create_bool_from_list(constraint_dict)
             expr = boolalg.And(expr, constraint_expr)
         return expr
 
-    def create_bool_from_list(self, constraint:List[str]):
+    def create_bool_from_list(self, constraint: List[str]):
         assert (
             len(constraint) == 3
         ), "Only two nodes can participate in a link: " + " ".join(constraint)
@@ -51,7 +52,9 @@ class FeatureModel:
         elif constraint[0] == "exc":
             return boolalg.Not(boolalg.And(x, y))
 
-    def create_bool_from_structure(self, root:data_types.StructureType, parent_name: str):
+    def create_bool_from_structure(
+        self, root: data_types.StructureType, parent_name: str
+    ):
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
             parent_symbol = sympy.symbols(parent_name)
             symb = []
@@ -102,9 +105,9 @@ class FeatureModel:
 
         return True
 
-    def count_number_of_feature_groups(self, root:data_types.StructureType) -> int:
+    def count_number_of_feature_groups(self, root: data_types.StructureType) -> int:
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
-            vals:List[int] = []
+            vals: List[int] = []
             for n in root.nodes.values():
                 vals.append(self.count_number_of_feature_groups(n))
             print(vals)
