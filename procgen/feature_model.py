@@ -1,4 +1,4 @@
-from typing import List, OrderedDict, Tuple
+from typing import Dict, List, OrderedDict, Set, Tuple
 from procgen import data_types
 
 import sympy
@@ -19,8 +19,6 @@ class FeatureModel:
                 "There is not exactly one root of the feature model which makes it ambigous. Number of roots: "
                 + str(len(roots))
             )
-
-        self.all_symbols = []
         self.structure_root_name = roots[0]
 
     def create_bool_from_fm(self):
@@ -28,12 +26,12 @@ class FeatureModel:
             self.structure[self.structure_root_name], self.structure_root_name
         )
         for constraint_dict in self.constraints:
-            constraint_expr = self.create_bool_from_list(constraint_dict)
+            constraint_expr = self.create_bool_from_list(constraint_dict, expr.atoms())
             expr = boolalg.And(expr, constraint_expr)
         return expr
 
     def create_bool_from_list(
-        self, constraint: List[str]
+        self, constraint: List[str], all_symbols: Set[sympy.Symbol]
     ) -> boolalg.Implies | boolalg.Not:
         if len(constraint) != 3:
             raise ValueError(
@@ -41,7 +39,7 @@ class FeatureModel:
             )
 
         x, y = sympy.symbols(constraint[1:])
-        if x not in self.all_symbols or y not in self.all_symbols:
+        if x not in all_symbols or y not in all_symbols:
             raise ValueError(
                 "Nodes of constraint do not exist: " + " ".join(constraint[1:])
             )
@@ -82,6 +80,7 @@ class FeatureModel:
             else:
                 pass
 
+            # BUG: This is not correct, here we assume that all children have mandatory flags
             mandatory = "mandatory" in root.meta and root.meta["mandatory"]
             for s in symb:
                 if mandatory:
@@ -90,30 +89,86 @@ class FeatureModel:
                     )
                 else:
                     sub_expr = boolalg.And(sub_expr, boolalg.Implies(s, parent_symbol))
-            self.all_symbols.append(sympy.symbols(parent_name))
             return sub_expr
         else:
             s: sympy.Symbol = sympy.symbols(parent_name)
-            self.all_symbols.append(s)
             return s
 
-    def check_fm_sat(self) -> bool:
+    def check_fm_sat(
+        self, *, all_models: bool = False
+    ) -> bool | Dict[sympy.Symbol, bool]:
         boolean_fm = self.create_bool_from_fm()
-        return True if inference.satisfiable(boolean_fm) else False
+        models = inference.satisfiable(boolean_fm, all_models=all_models)
+        if not all_models:
+            return True if models else False
+        else:
+            return models
 
     def create_bool_from_spec(
         self, spec: data_types.SpecificationType
-    ) -> List[Tuple[sympy.Symbol, bool]]:
-        boolean_fm = self.create_bool_from_fm()
-        num_groups = len(self.get_names_of_feature_groups())
+    ) -> Dict[str, bool]:
+        group_names = self.get_names_of_feature_groups()
+        boolean_spec: Dict[str, bool] = {}
+        for feat, val in spec.features.items():
+            if feat in group_names:
+                boolean_spec.update({feat + "/" + val: True})
+            else:
+                raise ValueError("Group name is not a specifiable feature: " + feat)
+        return boolean_spec
 
-        for feat, val in spec.features:
-            pass
+    def extend_bool_spec_from_fm(
+        self,
+        root: data_types.StructureType,
+        parent_name: str,
+        boolean_spec: Dict[str, bool],
+        connection_type: str = "",
+    ) -> Dict[str, bool]:
+        if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
+            if (
+                "type" not in root.meta
+                or not isinstance(root.meta["type"], str)
+                or root.meta["type"] not in ["and", "alt"]
+            ):
+                raise ValueError(
+                    'The "type" information in "meta" is either missing, not a string, or not "and" or "alt": '
+                    + parent_name
+                    + "\n"
+                    + str(root.meta)
+                )
+            else:
+                subs: Dict[str, bool] = {}
+                for name, node in root.nodes.items():
+                    subs.update(
+                        self.extend_bool_spec_from_fm(
+                            node,
+                            parent_name + "/" + name,
+                            boolean_spec,
+                            root.meta["type"],
+                        )
+                    )
+                return subs
+        else:
+            if parent_name in boolean_spec:
+                return {parent_name: boolean_spec[parent_name]}
+            elif parent_name not in boolean_spec and connection_type == "alt":
+                return {parent_name: False}
+            else:
+                return {}
+
+    def get_bool_from_spec(self, spec: data_types.SpecificationType) -> Dict[str, bool]:
+        boolean_spec = self.create_bool_from_spec(spec)
+        boolean_spec = self.extend_bool_spec_from_fm(
+            self.structure[self.structure_root_name],
+            self.structure_root_name,
+            boolean_spec,
+        )
+        return boolean_spec
 
     def get_possible_spec_sat(self, spec: data_types.SpecificationType):
         boolean_fm = self.create_bool_from_fm()
         boolean_spec_for_sub = self.create_bool_from_spec(spec)
-        boolean_fm = boolean_fm.subs(boolean_spec_for_sub)
+        boolean_fm = boolean_fm.subs(list(boolean_spec_for_sub.items()))
+
         return inference.satisfiable(boolean_fm, all_models=True)
 
     def check_spec_sat(self, spec: data_types.SpecificationType) -> bool:
@@ -131,11 +186,17 @@ class FeatureModel:
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
             vals: List[Tuple[str, List[str]]] = []
             for name, node in root.nodes.items():
-                vals.append((parent_name, self.collect_names_of_feature_groups(node, name)))
+                vals.append(
+                    (parent_name, self.collect_names_of_feature_groups(node, name))
+                )
             if all(map(lambda x: x[1] == [], vals)):
                 return [parent_name]
             else:
-                return [parent_name + "/" + child for parent_name, children_names in vals for child in children_names]
+                return [
+                    parent_name + "/" + child
+                    for parent_name, children_names in vals
+                    for child in children_names
+                ]
         else:
             return []
 
@@ -148,7 +209,9 @@ class FeatureModel:
                 pass
             # create and return product with features
         else:
-            raise ValueError("The specification is not consistent.")
+            raise ValueError(
+                "The specification is not consistent, it is impossible to satisfy the feature model with the given type code."
+            )
 
     def get_assembly_process(
         self, spec: data_types.SpecificationType
