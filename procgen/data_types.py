@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, OrderedDict
 
 class StructureType(BaseModel):
     meta : Dict[str, str | bool]
@@ -17,5 +17,16 @@ class FeatureModelType(BaseModel):
     order_constraints: List[OrderConstraintType]
     assembly_steps: Dict[str, List[str]]
 
-class SpecifiationType(BaseModel):
+class SpecificationType(BaseModel):
     features : List[str]
+
+class FeatureType(BaseModel):
+    group:str
+    assembly_action:str
+
+class ProductType(BaseModel):
+    features: List[FeatureType]
+    assembly_order: List[int]
+
+class AssemblyProcessType(BaseModel):
+    assembly: OrderedDict[str, List[str]]
