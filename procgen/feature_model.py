@@ -22,7 +22,7 @@ class FeatureModel:
         self.structure_root_name = roots[0]
 
     def create_bool_from_fm(self):
-        expr = self.create_bool_from_structure(
+        expr, _ = self.create_bool_from_structure(
             self.structure[self.structure_root_name], self.structure_root_name
         )
         for constraint_dict in self.constraints:
@@ -56,43 +56,81 @@ class FeatureModel:
     ):
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
             parent_symbol: sympy.Symbol = sympy.symbols(parent_name)
-            symb: List[sympy.Symbol] = []
+            sub_expr = []
             nodes = list(root.nodes.keys())
-            for n in nodes:
-                name = parent_name + "/" + n
-                symb.append(self.create_bool_from_structure(root.nodes[n], name))
-            sub_expr1 = boolalg.false
-            for s in symb:
-                sub_expr1 = boolalg.Or(sub_expr1, s)
-            sub_expr = boolalg.Equivalent(sub_expr1, parent_symbol)
+            for node_name in nodes:
+                qualified_name = parent_name + "/" + node_name
+                sub_expr.append(
+                    self.create_bool_from_structure(
+                        root.nodes[node_name], qualified_name
+                    )
+                )
+            or_sub_expr = boolalg.false
+            for s, _ in sub_expr:
+                or_sub_expr = boolalg.Or(or_sub_expr, s)
 
-            root_node_type = root.meta["type"]
-            if root_node_type == "alt":
-                sub_expr2 = boolalg.true
-                for i in range(len(symb)):
-                    for j in range(i + 1, len(symb)):
-                        sub_expr2 = boolalg.And(
-                            sub_expr2, boolalg.Not(boolalg.And(symb[i], symb[j]))
-                        )
-                sub_expr = boolalg.And(sub_expr, sub_expr2)
-            elif root_node_type == "and":
-                pass
-            else:
-                pass
+            and_sub_expr = boolalg.true
+            for s, _ in sub_expr:
+                and_sub_expr = boolalg.And(and_sub_expr, s)
 
-            # BUG: This is not correct, here we assume that all children have mandatory flags
-            mandatory = "mandatory" in root.meta and root.meta["mandatory"]
-            for s in symb:
-                if mandatory:
-                    sub_expr = boolalg.And(
-                        sub_expr, boolalg.Equivalent(s, parent_symbol)
+            # rules
+            # mandatory / optional connection
+            mandatory_expr = boolalg.true
+            for s, mand in sub_expr:
+                if mand:
+                    mandatory_expr = boolalg.And(
+                        mandatory_expr, boolalg.Equivalent(s, parent_symbol)
                     )
                 else:
-                    sub_expr = boolalg.And(sub_expr, boolalg.Implies(s, parent_symbol))
-            return sub_expr
+                    mandatory_expr = boolalg.And(
+                        mandatory_expr, boolalg.Implies(s, parent_symbol)
+                    )
+
+            # any kind of subfeatures
+            subfeature_expr = boolalg.Equivalent(or_sub_expr, parent_symbol)
+            if (
+                "type" not in root.meta
+                or not isinstance(root.meta["type"], str)
+                or root.meta["type"] not in ["and", "alt"]
+            ):
+                raise ValueError(
+                    'The "type" information in "meta" is either missing, not a string, or not "and" or "alt": '
+                    + parent_name
+                    + "\n"
+                    + str(root.meta)
+                )
+            else:
+                root_node_type = root.meta["type"]
+                if root_node_type == "alt":
+                    # alternative subfeatures
+                    alt_expr = boolalg.true
+                    for i in range(len(sub_expr)):
+                        for j in range(i + 1, len(sub_expr)):
+                            alt_expr = boolalg.And(
+                                alt_expr,
+                                boolalg.Not(
+                                    boolalg.And(sub_expr[i][0], sub_expr[j][0])
+                                ),
+                            )
+                elif root_node_type == "and":
+                    alt_expr = boolalg.true
+                else:
+                    alt_expr = boolalg.true
+
+            ret_expression = boolalg.And(
+                and_sub_expr, mandatory_expr, subfeature_expr, alt_expr
+            )
+            if "mandatory" in root.meta and isinstance(root.meta["mandatory"], bool):
+                return ret_expression, root.meta["mandatory"]
+            else:
+                return ret_expression, False
+
         else:
-            s: sympy.Symbol = sympy.symbols(parent_name)
-            return s
+            ret_expression = sympy.symbols(parent_name)
+            if "mandatory" in root.meta and isinstance(root.meta["mandatory"], bool):
+                return ret_expression, root.meta["mandatory"]
+            else:
+                return ret_expression, False
 
     def check_fm_sat(
         self, *, all_models: bool = False
@@ -122,8 +160,10 @@ class FeatureModel:
         parent_name: str,
         boolean_spec: Dict[str, bool],
         connection_type: str = "",
+        fill_not_choosen_with_false: bool = False,
     ) -> Dict[str, bool]:
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
+            subs: Dict[str, bool] = {}
             if (
                 "type" not in root.meta
                 or not isinstance(root.meta["type"], str)
@@ -136,7 +176,6 @@ class FeatureModel:
                     + str(root.meta)
                 )
             else:
-                subs: Dict[str, bool] = {}
                 for name, node in root.nodes.items():
                     subs.update(
                         self.extend_bool_spec_from_fm(
@@ -144,31 +183,50 @@ class FeatureModel:
                             parent_name + "/" + name,
                             boolean_spec,
                             root.meta["type"],
+                            fill_not_choosen_with_false,
                         )
                     )
-                return subs
+            return subs
         else:
             if parent_name in boolean_spec:
                 return {parent_name: boolean_spec[parent_name]}
             elif parent_name not in boolean_spec and connection_type == "alt":
                 return {parent_name: False}
+            elif (
+                parent_name not in boolean_spec
+                and connection_type == "and"
+                and fill_not_choosen_with_false
+            ):
+                return {parent_name: False}
             else:
                 return {}
 
-    def get_bool_from_spec(self, spec: data_types.SpecificationType) -> Dict[str, bool]:
+    def get_bool_from_spec(
+        self,
+        spec: data_types.SpecificationType,
+        *,
+        fill_not_choosen_with_false: bool = False,
+    ) -> Dict[str, bool]:
         boolean_spec = self.create_bool_from_spec(spec)
         boolean_spec = self.extend_bool_spec_from_fm(
             self.structure[self.structure_root_name],
             self.structure_root_name,
             boolean_spec,
+            fill_not_choosen_with_false=fill_not_choosen_with_false,
         )
         return boolean_spec
 
-    def get_possible_spec_sat(self, spec: data_types.SpecificationType):
+    def get_possible_spec_sat(
+        self,
+        spec: data_types.SpecificationType,
+        *,
+        fill_not_choosen_with_false: bool = False,
+    ):
         boolean_fm = self.create_bool_from_fm()
-        boolean_spec_for_sub = self.create_bool_from_spec(spec)
+        boolean_spec_for_sub = self.get_bool_from_spec(
+            spec, fill_not_choosen_with_false=fill_not_choosen_with_false
+        )
         boolean_fm = boolean_fm.subs(list(boolean_spec_for_sub.items()))
-
         return inference.satisfiable(boolean_fm, all_models=True)
 
     def check_spec_sat(self, spec: data_types.SpecificationType) -> bool:
@@ -189,6 +247,7 @@ class FeatureModel:
                 vals.append(
                     (parent_name, self.collect_names_of_feature_groups(node, name))
                 )
+            print(vals)
             if all(map(lambda x: x[1] == [], vals)):
                 return [parent_name]
             else:
