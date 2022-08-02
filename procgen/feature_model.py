@@ -15,26 +15,27 @@ class FeatureModel:
         self.all_symbols = []
 
         self.structure = feature_model.structure
-        self.constraints: List[List[str]] = feature_model.constraints
-        self.order_constraints: List[
-            Dict[str, List[int] | List[str | Dict[str, str]]]
-        ] = feature_model.order_constraints
-        self.assembly_steps: Dict[str, List[str]] = feature_model.assembly_steps
-        root = list(feature_model.structure.keys())
+        self.constraints = feature_model.constraints
+        self.order_constraints = feature_model.order_constraints
+        self.assembly_steps = feature_model.assembly_steps
+        roots = list(feature_model.structure.keys())
         assert (
-            len(root) == 1
+            len(roots) == 1
         ), "There is more than one root of the feature model which makes it ambigous."
 
-        self.boolean_fm = self.create_bool_from_fm(root[0])
+        self.structure_root_name = roots[0]
+        self.boolean_fm = self.create_bool_from_fm(self.structure_root_name)
+        self.num_feature_groups = self.count_number_of_feature_groups(self.structure[self.structure_root_name])
+        print(self.num_feature_groups)
 
-    def create_bool_from_fm(self, root):
+    def create_bool_from_fm(self, root:str):
         expr = self.create_bool_from_structure(self.structure[root], root)
         for constraint_dict in self.constraints:
             constraint_expr = self.create_bool_from_list(constraint_dict)
             expr = boolalg.And(expr, constraint_expr)
         return expr
 
-    def create_bool_from_list(self, constraint):
+    def create_bool_from_list(self, constraint:List[str]):
         assert (
             len(constraint) == 3
         ), "Only two nodes can participate in a link: " + " ".join(constraint)
@@ -50,8 +51,8 @@ class FeatureModel:
         elif constraint[0] == "exc":
             return boolalg.Not(boolalg.And(x, y))
 
-    def create_bool_from_structure(self, root, parent_name: str):
-        if "abstract" in root.meta and root.meta["abstract"]:
+    def create_bool_from_structure(self, root:data_types.StructureType, parent_name: str):
+        if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
             parent_symbol = sympy.symbols(parent_name)
             symb = []
             nodes = list(root.nodes.keys())
@@ -101,6 +102,19 @@ class FeatureModel:
 
         return True
 
+    def count_number_of_feature_groups(self, root:data_types.StructureType) -> int:
+        if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
+            vals:List[int] = []
+            for n in root.nodes.values():
+                vals.append(self.count_number_of_feature_groups(n))
+            print(vals)
+            if all(map(lambda x: x == 0, vals)):
+                return 1
+            else:
+                return sum(vals)
+        else:
+            return 0
+
     def parse_type_code(self, type_code: str) -> specification.Specification:
         groups = re.split(r"\s|/|(?!\s)-(?!\s)", type_code)
         spec = specification.Specification()
@@ -123,7 +137,7 @@ class FeatureModel:
     def create_product(
         self, specification: specification.Specification
     ) -> product.Product:
-        if self.check_specification(specification):
+        if self.check_spec_satisfy(specification):
             for group, value in specification.__dataclass_fields__:
                 # assembly_action = self.structure[][group]
                 # prod = Product()
