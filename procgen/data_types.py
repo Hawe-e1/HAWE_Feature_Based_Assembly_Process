@@ -18,7 +18,7 @@ class FeatureModelType(BaseModel):
     assembly_steps: Dict[str, List[str]]
 
 class SpecificationType(BaseModel):
-    features : List[str]
+    features : Dict[str, str]
 
 class FeatureType(BaseModel):
     group:str

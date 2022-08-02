@@ -6,11 +6,12 @@ import procgen.feature_model
 import sympy
 
 if __name__ == "__main__":
-    feature_model_json = procgen.utils.load_json_from_file_path("data/very_small_feature_model.json")
+    feature_model_json = procgen.utils.load_json_from_file_path("data/feature_model.json")
     feature_model = procgen.data_types.FeatureModelType(**feature_model_json)
     fm = procgen.feature_model.FeatureModel(feature_model)
+    print(fm.get_names_of_feature_groups())
+    print(len(fm.get_names_of_feature_groups()))
     print(fm.check_fm_sat())
-    print(fm.get_number_of_feature_groups())
     print()
     A,B,C = sympy.symbols("A,A/B,A/C")
     manual_expression_opt_and = sympy.Equivalent((B | C), A) & ~(B & C)

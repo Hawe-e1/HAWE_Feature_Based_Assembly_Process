@@ -1,3 +1,4 @@
+from typing import List
 import procgen.data_types as data_types
 import procgen.feature_model as feature_model
 from fastapi import FastAPI, HTTPException
@@ -34,18 +35,30 @@ async def get_num_groups(fm_json: data_types.FeatureModelType):
     num: int
     try:
         fm = feature_model.FeatureModel(fm_json)
-        num = fm.get_number_of_feature_groups()
+        num = len(fm.get_names_of_feature_groups())
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Integral error " + str(e))
     return num
 
 
+@app.post("/get/feature_group_names")
+async def get_feature_group_names(fm_json: data_types.FeatureModelType):
+    feature_group_names: List[str]
+    try:
+        fm = feature_model.FeatureModel(fm_json)
+        feature_group_names = fm.get_names_of_feature_groups()
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Integral error " + str(e))
+    return feature_group_names
+
+
 @app.post("/get/assembly_steps")
 async def get_assembly_steps(
     fm_json: data_types.FeatureModelType, spec: data_types.SpecificationType
 ):
-    assembly_steps:data_types.AssemblyProcessType
+    assembly_steps: data_types.AssemblyProcessType
     try:
         fm = feature_model.FeatureModel(fm_json)
         assembly_steps = fm.get_assembly_process(spec)

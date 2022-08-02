@@ -35,13 +35,13 @@ class FeatureModel:
     def create_bool_from_list(
         self, constraint: List[str]
     ) -> boolalg.Implies | boolalg.Not:
-        if len(constraint) == 3:
+        if len(constraint) != 3:
             raise ValueError(
                 "Only two nodes can participate in a link: " + " ".join(constraint)
             )
 
         x, y = sympy.symbols(constraint[1:])
-        if x not in self.all_symbols or not y in self.all_symbols:
+        if x not in self.all_symbols or y not in self.all_symbols:
             raise ValueError(
                 "Nodes of constraint do not exist: " + " ".join(constraint[1:])
             )
@@ -105,9 +105,9 @@ class FeatureModel:
         self, spec: data_types.SpecificationType
     ) -> List[Tuple[sympy.Symbol, bool]]:
         boolean_fm = self.create_bool_from_fm()
-        num_groups = self.get_number_of_feature_groups()
+        num_groups = len(self.get_names_of_feature_groups())
 
-        for f in spec.features:
+        for feat, val in spec.features:
             pass
 
     def get_possible_spec_sat(self, spec: data_types.SpecificationType):
@@ -120,29 +120,31 @@ class FeatureModel:
         models = self.get_possible_spec_sat(spec)
         return True if next(models) else False
 
-    def get_number_of_feature_groups(self) -> int:
-        return self.count_number_of_feature_groups(
-            self.structure[self.structure_root_name]
+    def get_names_of_feature_groups(self) -> List[str]:
+        return self.collect_names_of_feature_groups(
+            self.structure[self.structure_root_name], self.structure_root_name
         )
 
-    def count_number_of_feature_groups(self, root: data_types.StructureType) -> int:
+    def collect_names_of_feature_groups(
+        self, root: data_types.StructureType, parent_name: str
+    ) -> List[str]:
         if "abstract" in root.meta and root.meta["abstract"] and root.nodes:
-            vals: List[int] = []
-            for n in root.nodes.values():
-                vals.append(self.count_number_of_feature_groups(n))
-            if all(map(lambda x: x == 0, vals)):
-                return 1
+            vals: List[Tuple[str, List[str]]] = []
+            for name, node in root.nodes.items():
+                vals.append((parent_name, self.collect_names_of_feature_groups(node, name)))
+            if all(map(lambda x: x[1] == [], vals)):
+                return [parent_name]
             else:
-                return sum(vals)
+                return [parent_name + "/" + child for parent_name, children_names in vals for child in children_names]
         else:
-            return 0
+            return []
 
     def create_product(
         self, spec: data_types.SpecificationType
     ) -> data_types.ProductType:
         if self.check_spec_sat(spec):
             for feature_spec in spec.features:
-                
+
                 pass
             # create and return product with features
         else:
