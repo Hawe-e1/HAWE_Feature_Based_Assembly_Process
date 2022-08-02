@@ -1,0 +1,192 @@
+{
+    "structure": {
+        "Actuation": {
+            "meta": {
+                "type": "alt",
+                "abstract": true,
+                "mandatory": true
+            },
+            "nodes": {
+                "AG1": {
+                    "meta": {
+                        "type": "and",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "E": {
+                            "meta": {}
+                        },
+                        "E0": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG2": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "empty": {
+                            "meta": {}
+                        },
+                        "P": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG3": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "F": {
+                            "meta": {}
+                        },
+                        "T": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG4": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "empty": {
+                            "meta": {}
+                        },
+                        "I": {
+                            "meta": {}
+                        },
+                        "M": {
+                            "meta": {}
+                        },
+                        "MM": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG5": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "D": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG6": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "8": {
+                            "meta": {}
+                        },
+                        "9": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG7": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "empty": {
+                            "meta": {}
+                        },
+                        "UNF": {
+                            "meta": {}
+                        }
+                    }
+                },
+                "AG8": {
+                    "meta": {
+                        "type": "alt",
+                        "abstract": true,
+                        "mandatory": true
+                    },
+                    "nodes": {
+                        "empty": {
+                            "meta": {}
+                        },
+                        "G": {
+                            "meta": {}
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "constraints": [
+    ],
+    "order_constraints": [
+        {
+            "expr": [
+                "and",
+                "Actuation/G1/E0",
+                "Actuation/G8/CAN"
+            ],
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
+        },
+        {
+            "expr": [
+                "or",
+                "Controller/L",
+                "Controller/I"
+            ],
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
+        },
+        {
+            "expr": [
+                "and",
+                "Actuation/G1/E",
+                "Actuation/G5/A"
+            ],
+            "order": [
+                7,
+                2,
+                6,
+                1,
+                3,
+                4,
+                5,
+                8
+            ]
+        }
+    ],
+    "assembly_steps": {}
+}

@@ -1,140 +1,36 @@
 {
     "structure": {
-        "Actuation": {
+        "R": {
             "meta": {
                 "type": "and",
                 "abstract": true,
                 "mandatory": true
             },
             "nodes": {
-                "AG1": {
+                "A1": {
                     "meta": {
+                        "abstract": true,
                         "type": "and",
-                        "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
-                        "E": {
+                        "B1": {
                             "meta": {}
                         },
-                        "E0": {
+                        "B2": {
                             "meta": {}
                         }
                     }
                 },
-                "AG2": {
+                "A2": {
                     "meta": {
-                        "type": "alt",
-                        "abstract": true,
                         "mandatory": true
-                    },
-                    "nodes": {
-                        "empty": {
-                            "meta": {}
-                        },
-                        "P": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG3": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "F": {
-                            "meta": {}
-                        },
-                        "T": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG4": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "empty": {
-                            "meta": {}
-                        },
-                        "I": {
-                            "meta": {}
-                        },
-                        "M": {
-                            "meta": {}
-                        },
-                        "MM": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG5": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "D": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG6": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "8": {
-                            "meta": {}
-                        },
-                        "9": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG7": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "empty": {
-                            "meta": {}
-                        },
-                        "UNF": {
-                            "meta": {}
-                        }
-                    }
-                },
-                "AG8": {
-                    "meta": {
-                        "type": "alt",
-                        "abstract": true,
-                        "mandatory": true
-                    },
-                    "nodes": {
-                        "empty": {
-                            "meta": {}
-                        },
-                        "G": {
-                            "meta": {}
-                        }
                     }
                 }
             }
         }
     },
-    "constraints": [
-    ],
+    "constraints": [],
     "order_constraints": [
         {
             "expr": [
