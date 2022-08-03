@@ -1,4 +1,3 @@
-import re
 from typing import Dict, List, Set, Tuple
 from procgen import data_types, utils
 
@@ -25,6 +24,11 @@ class FeatureModel:
         self.root = self.structure[structure_root_id]
 
     def create_bool_from_fm(self):
+        """Creates a sympy boolean repersentation from the feature model and the constraints
+
+        Returns:
+            Sympy boolean expression: The result boolean expression
+        """
         expr, _, _ = self.create_bool_from_structure(
             self.root, self.structure_root_name
         )
@@ -36,6 +40,18 @@ class FeatureModel:
     def create_bool_from_list(
         self, constraint: data_types.ConstraintType, all_symbols: Set[sympy.Symbol]
     ) -> boolalg.Implies | boolalg.Not:
+        """Creates a sympy boolean expression from the specified constraint
+
+        Args:
+            constraint (data_types.ConstraintType): The constraint to be converted to boolean
+            all_symbols (Set[sympy.Symbol]): All possible symbols that can appear in a constraint (taken from feature model's boolean represenation with sympy's atomic())
+
+        Raises:
+            ValueError: If the constraints are malformed
+
+        Returns:
+            boolalg.Implies | boolalg.Not: The resulting boolean expression
+        """
         if len(constraint.variables) < 2:
             raise ValueError(
                 "At least two nodes can participate in a link: "
@@ -145,6 +161,18 @@ class FeatureModel:
         connection_type: str = "",
         fill_not_choosen_with_false: bool = False,
     ) -> Dict[str, bool]:
+        """Recursively extends the specification by filling in "alt" sub-features with False, and every unspecified feature with False if a flag is turned on.
+
+        Args:
+            root (data_types.StructureType): The root of the feature model
+            parent_name (str): The name of the root
+            boolean_spec (Dict[str, bool]): The substitution to be updated given as {symbol_name : value (True/False)}
+            connection_type (str, optional): The type of the connection, either "alt" or "and". Defaults to "".
+            fill_not_choosen_with_false (bool, optional): The flag controlling whether to fill every unchosen feature with False. Defaults to False.
+
+        Returns:
+            Dict[str, bool]: The updated supstitution given as {symbol_name : value (True/False)}
+        """
         if root.meta.abstract and root.nodes:
             subs: Dict[str, bool] = {}
             for node in root.nodes.values():
@@ -175,6 +203,17 @@ class FeatureModel:
     def parse_specification(
         self, unparsed_spec: data_types.UnparsedSpecificationType
     ) -> data_types.SpecificationType:
+        """Parses the features within an UnparsedSpecificationType object to create a SpecificationType object
+
+        Args:
+            unparsed_spec (data_types.UnparsedSpecificationType): The uparsed specification
+
+        Raises:
+            ValueError: If the feature could not be parsed
+
+        Returns:
+            data_types.SpecificationType: The parsed specification
+        """
         parsed_spec_dict: Dict[str, List[str]] = {}
         for feature_group, features in unparsed_spec.features.items():
             node_path = feature_group.split("/")
@@ -220,7 +259,6 @@ class FeatureModel:
         Returns:
             Dict[str, bool]: The retourned
         """
-
         group_names = self.get_names_of_feature_groups()
         if group_names is None:
             raise ValueError("There is no specifiable group within the feature model.")
@@ -267,6 +305,11 @@ class FeatureModel:
         return True if next(models) else False
 
     def get_names_of_feature_groups(self) -> List[str]:
+        """Returns the name of the specifiable feature groups
+
+        Returns:
+            List[str]: The names of features which can be specified by a SpecificationType object
+        """
         group_names = self.collect_names_of_feature_groups(
             self.root, self.structure_root_name
         )
@@ -316,6 +359,17 @@ class FeatureModel:
     def create_features_for_product(
         self, spec: data_types.SpecificationType
     ) -> List[data_types.FeatureType]:
+        """Creates a features for a product from a specification
+
+        Args:
+            spec (data_types.SpecificationType): The specification object describing the particular features needed
+
+        Raises:
+            ValueError: If the specification contains non existent feature or if it has no assembly action
+
+        Returns:
+            List[data_types.FeatureType]: The list of created features
+        """
         if self.check_spec_sat(spec):
             features: List[data_types.FeatureType] = []
             for node_path, feature_spec in spec.features.items():
@@ -357,6 +411,18 @@ class FeatureModel:
     def recurse_into_fm(
         self, root: data_types.StructureType, list_of_nodes: List[str]
     ) -> data_types.StructureType:
+        """Recurses into a feature model from the root node based on a list specifing the nodes to go through
+
+        Args:
+            root (data_types.StructureType): The node to start from the recursion
+            list_of_nodes (List[str]): The list of nodes to follow
+
+        Raises:
+            IndexError: If the a node in the list does not exist at the specific level
+
+        Returns:
+            data_types.StructureType: The final root at the end of the recursion
+        """
         if len(list_of_nodes) == 0:
             return root
         else:
