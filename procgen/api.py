@@ -6,6 +6,11 @@ from fastapi import FastAPI, HTTPException
 app = FastAPI()
 
 
+@app.get("/")
+async def root():
+    return {"status": "Stable"}
+
+
 @app.post("/check/feature_model")
 async def check_fm(fm_json: data_types.FeatureModelType):
     try:

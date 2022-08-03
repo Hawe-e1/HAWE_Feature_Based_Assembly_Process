@@ -7,5 +7,7 @@ COPY main.py /assembly-steps-gen/main.py
 
 WORKDIR /assembly-steps-gen
 
+COPY ./start.sh /start.sh
+RUN chmod +x /start.sh
 
-CMD python main.py
+CMD ["./start.sh"]

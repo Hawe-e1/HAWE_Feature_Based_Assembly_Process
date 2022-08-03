@@ -1,5 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-run:
-  web: docker run registry.heroku.com/assembly-steps-gen/web -p 8000:80
