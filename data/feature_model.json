@@ -353,7 +353,8 @@
                         "type": "and",
                         "abstract": true,
                         "mandatory": true
-                    }
+                    },
+                    "nodes":{}
                 }
             }
         }

@@ -10,7 +10,7 @@
                 "A1": {
                     "meta": {
                         "abstract": true,
-                        "type": "and",
+                        "type": "alt",
                         "mandatory": true
                     },
                     "nodes": {
@@ -24,7 +24,6 @@
                 },
                 "A2": {
                     "meta": {
-                        "mandatory": true
                     }
                 }
             }

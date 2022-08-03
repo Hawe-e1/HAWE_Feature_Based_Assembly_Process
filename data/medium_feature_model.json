@@ -75,12 +75,15 @@
                 },
                 "AG5": {
                     "meta": {
-                        "type": "alt",
+                        "type": "and",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "D": {
+                            "meta": {}
+                        },
+                        "F": {
                             "meta": {}
                         }
                     }
