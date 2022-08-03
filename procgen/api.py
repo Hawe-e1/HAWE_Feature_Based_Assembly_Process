@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 import procgen.data_types as data_types
 import procgen.feature_model as feature_model
 from fastapi import FastAPI, HTTPException
@@ -11,7 +11,7 @@ async def root():
     return {"status": "Stable"}
 
 
-@app.post("/check/feature_model")
+@app.post("/check/feature_model", response_model=bool)
 async def check_fm(fm_json: data_types.FeatureModelType):
     try:
         fm = feature_model.FeatureModel(fm_json)
@@ -21,7 +21,7 @@ async def check_fm(fm_json: data_types.FeatureModelType):
     return sat
 
 
-@app.post("/check/type_code_satisfy")
+@app.post("/check/type_code_satisfy", response_model=bool)
 async def check_type_code(
     fm_json: data_types.FeatureModelType, spec: data_types.UnparsedSpecificationType
 ):
@@ -35,7 +35,7 @@ async def check_type_code(
     return sat
 
 
-@app.post("/get/number_of_feature_groups")
+@app.post("/get/number_of_feature_groups", response_model=int)
 async def get_num_groups(fm_json: data_types.FeatureModelType):
     num: int
     try:
@@ -47,7 +47,7 @@ async def get_num_groups(fm_json: data_types.FeatureModelType):
     return num
 
 
-@app.post("/get/feature_group_names")
+@app.post("/get/feature_group_names", response_model=List[str])
 async def get_feature_group_names(fm_json: data_types.FeatureModelType):
     feature_group_names: List[str]
     try:
@@ -59,7 +59,7 @@ async def get_feature_group_names(fm_json: data_types.FeatureModelType):
     return feature_group_names
 
 
-@app.post("/get/assembly_steps")
+@app.post("/get/assembly_steps", response_model=List[Dict[str, List[str]]])
 async def get_assembly_steps(
     fm_json: data_types.FeatureModelType, spec: data_types.UnparsedSpecificationType
 ):
