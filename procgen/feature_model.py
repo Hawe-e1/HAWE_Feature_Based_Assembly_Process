@@ -19,9 +19,9 @@ class FeatureModel:
                 "There is not exactly one root of the feature model which makes it ambigous. Number of roots: "
                 + str(len(roots))
             )
-        self.structure_root_id = roots[0]
-        self.structure_root_name = self.structure[self.structure_root_id].meta.name
-        self.root = self.structure[self.structure_root_id]
+        structure_root_id = roots[0]
+        self.structure_root_name = self.structure[structure_root_id].meta.name
+        self.root = self.structure[structure_root_id]
 
     def create_bool_from_fm(self):
         expr, _, _ = self.create_bool_from_structure(
@@ -198,7 +198,6 @@ class FeatureModel:
         """
 
         group_names = self.get_names_of_feature_groups()
-        print(group_names)
         if group_names is None:
             raise ValueError("There is no specifiable group within the feature model.")
         boolean_spec: Dict[str, bool] = {}
@@ -324,12 +323,11 @@ class FeatureModel:
                                 assembly_action=assembly_action,
                             )
                         )
-                else:
-                    pass
             return features
         else:
             raise ValueError(
-                "The specification is not consistent, it is impossible to satisfy the feature model with the given type code."
+                "The specification is not consistent, it is impossible to satisfy the feature model with the given type code: "
+                + spec.__repr__()
             )
 
     def recurse_into_fm(
@@ -374,7 +372,6 @@ class FeatureModel:
                         ValueError(
                             "The order constraint contains an unkown action: " + action
                         )
-        print(temp_orders)
         final_order: List[str] = ["" for _ in range(len(default_order))]
         for action, indicies in temp_orders.items():
             if len(indicies) == 0:
