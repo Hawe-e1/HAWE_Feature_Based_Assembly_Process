@@ -34,8 +34,9 @@ class AssemblyActionOrderType(List[str]):
 
 
 class OrderConstraintExpressionType(BaseModel):
-    type: Literal["and"] | Literal["or"] | Literal["not"]
-    variables: AssemblyActionOrderType
+    type: Literal["and"] | Literal["or"]
+    variables: List[str]
+    order: AssemblyActionOrderType
 
 
 class OrderConstraintsType(BaseModel):

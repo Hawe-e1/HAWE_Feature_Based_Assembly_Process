@@ -19,8 +19,9 @@ class FeatureModel:
                 "There is not exactly one root of the feature model which makes it ambigous. Number of roots: "
                 + str(len(roots))
             )
-        self.structure_root_name = roots[0]
-        self.root = self.structure[self.structure_root_name]
+        self.structure_root_id = roots[0]
+        self.structure_root_name = self.structure[self.structure_root_id].meta.name
+        self.root = self.structure[self.structure_root_id]
 
     def create_bool_from_fm(self):
         expr, _, _ = self.create_bool_from_structure(
@@ -36,7 +37,7 @@ class FeatureModel:
     ) -> boolalg.Implies | boolalg.Not:
         if len(constraint.variables) < 2:
             raise ValueError(
-                "Only two nodes can participate in a link: "
+                "At least two nodes can participate in a link: "
                 + " ".join(constraint.variables)
             )
 
@@ -56,7 +57,7 @@ class FeatureModel:
     def create_bool_from_structure(
         self, root: data_types.StructureType, parent_name: str
     ):
-        """REcursively reates a sympy boolean expression from the feature model
+        """Recursively reates a sympy boolean expression from the feature model
 
         Args:
             root (data_types.StructureType): The root of the model
@@ -71,23 +72,9 @@ class FeatureModel:
         if root.meta.abstract and root.nodes:
             parent_symbol: sympy.Symbol = sympy.symbols(parent_name)
             sub_expr = []
-            nodes = list(root.nodes.keys())
-            for node_name in nodes:
-                qualified_name = parent_name + "/" + node_name
-                sub_expr.append(
-                    self.create_bool_from_structure(
-                        root.nodes[node_name], qualified_name
-                    )
-                )
-            or_sub_expr = boolalg.false
-            for s, _, _ in sub_expr:
-                or_sub_expr = boolalg.Or(or_sub_expr, s)
-
-            and_sub_expr = boolalg.true
-
-            for s, _, sym in sub_expr:
-                if not sym:
-                    and_sub_expr = boolalg.And(and_sub_expr, s)
+            for node in root.nodes.values():
+                qualified_name = parent_name + "/" + node.meta.name
+                sub_expr.append(self.create_bool_from_structure(node, qualified_name))
 
             # rules
             # mandatory / optional connection
@@ -103,6 +90,9 @@ class FeatureModel:
             mand_opt_expr = boolalg.And(mandatory, optional)
 
             # any kind of subfeatures
+            or_sub_expr = boolalg.false
+            for s, _, _ in sub_expr:
+                or_sub_expr = boolalg.Or(or_sub_expr, s)
             subfeature_expr = boolalg.Equivalent(or_sub_expr, parent_symbol)
             if root.meta.type == "alt":
                 # alternative subfeatures
@@ -119,7 +109,7 @@ class FeatureModel:
                 alt_expr = boolalg.true
 
             ret_expression = boolalg.And(
-                and_sub_expr, mand_opt_expr, subfeature_expr, alt_expr
+                parent_symbol, mand_opt_expr, subfeature_expr, alt_expr
             )
 
             return ret_expression, root.meta.mandatory, True
@@ -158,11 +148,11 @@ class FeatureModel:
             subs: Dict[str, bool] = {}
             # if root.meta.mandatory:
             #    subs.update({parent_name: True})
-            for name, node in root.nodes.items():
+            for node in root.nodes.values():
                 subs.update(
                     self.extend_bool_spec_from_fm(
                         node,
-                        parent_name + "/" + name,
+                        parent_name + "/" + node.meta.name,
                         boolean_spec,
                         root.meta.type,
                         fill_not_choosen_with_false,
@@ -208,6 +198,7 @@ class FeatureModel:
         """
 
         group_names = self.get_names_of_feature_groups()
+        print(group_names)
         if group_names is None:
             raise ValueError("There is no specifiable group within the feature model.")
         boolean_spec: Dict[str, bool] = {}
@@ -275,8 +266,10 @@ class FeatureModel:
         """
         if root.meta.abstract and root.nodes:
             vals: List[Tuple[str, List[str]]] = []
-            for name, node in root.nodes.items():
-                children_names = self.collect_names_of_feature_groups(node, name)
+            for node in root.nodes.values():
+                children_names = self.collect_names_of_feature_groups(
+                    node, node.meta.name
+                )
                 if children_names is not None:
                     vals.append((parent_name, children_names))
             if any(map(lambda x: x[1] == [], vals)):
@@ -307,12 +300,23 @@ class FeatureModel:
                 node = self.recurse_into_fm(self.root, node_path_list)
                 if node.nodes:
                     for selected_feature_name in feature_spec:
-                        selected_feature = node.nodes[selected_feature_name]
+                        selected_feature = None
+                        for possible_node in node.nodes.values():
+                            if possible_node.meta.name == selected_feature_name:
+                                selected_feature = possible_node
+                                break
+                        if selected_feature is None:
+                            raise ValueError(
+                                "Node not found with name: " + selected_feature_name
+                            )
+
                         if selected_feature.meta.assembly_action:
                             assembly_action = selected_feature.meta.assembly_action
                         else:
-                            assembly_action = "default"
-                            # TODO change to: raise ValueError("Assembly action not specified for feature: " + node_path)
+                            raise ValueError(
+                                "Assembly action not specified for feature: "
+                                + node_path
+                            )
                         features.append(
                             data_types.FeatureType(
                                 group=node_path,
@@ -336,18 +340,50 @@ class FeatureModel:
         else:
             node_name = list_of_nodes[0]
             if root.nodes:
-                return self.recurse_into_fm(root.nodes[node_name], list_of_nodes[1:])
-            else:
-                raise IndexError("The node key list is not correct")
+                for possible_node in root.nodes.values():
+                    if possible_node.meta.name == node_name:
+                        return self.recurse_into_fm(possible_node, list_of_nodes[1:])
+
+            raise IndexError("The node key list is not correct")
 
     def create_assembly_order(
         self, spec: data_types.SpecificationType
     ) -> data_types.AssemblyActionOrderType:
         default_order = self.order_constraints.default
-        for constraint in self.order_constraints:
-            if constraint:
-                pass
-        return default_order
+        temp_orders: Dict[str, Set[int]] = {action: set() for action in default_order}
+        spec_feature_names: Set[str] = set()
+        for group, features in spec.features.items():
+            for feat in features:
+                spec_feature_names.add("/".join([group, feat]))
+
+        for constraint in self.order_constraints.constraints:
+            if len(default_order) != len(constraint.order):
+                raise ValueError(
+                    "The length of the constraint does not match the length of the default order: "
+                    + " ".join(constraint.order)
+                )
+            variables = set(constraint.variables)
+            var_in_feat = [var in spec_feature_names for var in variables]
+            if (constraint.type == "and" and variables and all(var_in_feat)) or (
+                constraint.type == "or" and variables and any(var_in_feat)
+            ):
+                for i, action in enumerate(constraint.order):
+                    if action in temp_orders:
+                        temp_orders[action].add(i)
+                    else:
+                        ValueError(
+                            "The order constraint contains an unkown action: " + action
+                        )
+        print(temp_orders)
+        final_order: List[str] = ["" for _ in range(len(default_order))]
+        for action, indicies in temp_orders.items():
+            if len(indicies) == 0:
+                final_order[default_order.index(action)] = action
+            elif len(indicies) == 1:
+                final_order[list(indicies)[0]] = action
+            else:
+                raise ValueError("Unsatisfiable order constraints.")
+        return data_types.AssemblyActionOrderType(final_order)
 
     def create_product(
         self, spec: data_types.SpecificationType
@@ -359,16 +395,27 @@ class FeatureModel:
     def create_assembly_process(
         self, prod: data_types.ProductType
     ) -> data_types.AssemblyProcessType:
-        assembly_actions: List[data_types.AssemblyActionStepType] = []
+        """Creaets an assembly process from a specification using the assembly actions
+
+        Args:
+            prod (data_types.ProductType): The product that will be used for the assembly
+
+        Raises:
+            ValueError: If the assembly action specified in the feature is not present in the assembly actions list
+
+        Returns:
+            data_types.AssemblyProcessType: The final assembly process
+        """
+        assembly_actions: List[data_types.AssemblyActionStepType] = [
+            data_types.AssemblyActionStepType({}) for _ in range(len(prod.features))
+        ]
         for fet in prod.features:
-            data_types.AssemblyActionStepType()
-
-            assembly_actions.append(
-                data_types.AssemblyActionStepType(
-                    {fet.assembly_action: self.assembly_steps[fet.assembly_action]}
-                )
+            if fet.assembly_action not in prod.assembly_order:
+                raise ValueError("Unkown assembly action: " + fet.assembly_action)
+            final_action = fet.assembly_action.replace("_", fet.selected_feature)
+            assembly_actions[prod.assembly_order.index(fet.assembly_action)].update(
+                {final_action: self.assembly_steps[fet.assembly_action]}
             )
-
         return data_types.AssemblyProcessType(assembly_actions)
 
     def get_assembly_process(

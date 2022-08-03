@@ -7,7 +7,7 @@ import sympy
 
 if __name__ == "__main__":
     feature_model_json = procgen.utils.load_json_from_file_path(
-        "data/very_small_feature_model.json"
+        "data/small_feature_model.json"
     )
     feature_model = procgen.data_types.FeatureModelType(**feature_model_json)
     fm = procgen.feature_model.FeatureModel(feature_model)
@@ -25,11 +25,12 @@ if __name__ == "__main__":
         }
     )
     spec = procgen.data_types.UnparsedSpecificationType(
-        features={"R/A1": "B1 B2", "R": "A2"}
+        features={"R/A1": "B1", "R": "A2"}
     )
-    spec = procgen.data_types.UnparsedSpecificationType(features={"A": "B C"})
+    # spec = procgen.data_types.UnparsedSpecificationType(features={})  # {"A": "B"})
     spec = fm.parse_specification(spec)
     # print(fm.create_bool_from_fm())
+    print(fm.get_names_of_feature_groups())
     names = fm.get_names_of_feature_groups()
     print(fm.get_assembly_process(spec))
     print(names)

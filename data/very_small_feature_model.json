@@ -1,6 +1,6 @@
 {
     "structure": {
-        "A": {
+        "id1": {
             "meta": {
                 "name": "A",
                 "type": "and",
@@ -8,13 +8,13 @@
                 "mandatory": false
             },
             "nodes": {
-                "B": {
+                "id2": {
                     "meta": {
                         "name": "B",
                         "assembly_action": "assemble A _"
                     }
                 },
-                "C": {
+                "id3": {
                     "meta": {
                         "name": "C",
                         "assembly_action": "assemble A _"

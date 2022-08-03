@@ -1,87 +1,72 @@
 {
     "structure": {
-        "R": {
+        "id1": {
             "meta": {
+                "name": "R",
                 "type": "and",
                 "abstract": true,
                 "mandatory": true
             },
             "nodes": {
-                "A1": {
+                "id2": {
                     "meta": {
+                        "name": "A1",
                         "abstract": true,
                         "type": "alt",
                         "mandatory": true
                     },
                     "nodes": {
-                        "B1": {
-                            "meta": {}
+                        "id4": {
+                            "meta": {
+                                "name": "B1",
+                                "assembly_action": "Assemble A _"
+                            }
                         },
-                        "B2": {
-                            "meta": {}
+                        "id5": {
+                            "meta": {
+                                "name": "B2",
+                                "assembly_action": "Assemble A _"
+                            }
                         }
                     }
                 },
-                "A2": {
+                "id3": {
                     "meta": {
+                        "name": "A2",
+                        "assembly_action": "Assemble R _"
                     }
                 }
             }
         }
     },
     "constraints": [],
-    "order_constraints": [
-        {
-            "expr": [
-                "and",
-                "Actuation/G1/E0",
-                "Actuation/G8/CAN"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        },
-        {
-            "expr": [
-                "or",
-                "Controller/L",
-                "Controller/I"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        },
-        {
-            "expr": [
-                "and",
-                "Actuation/G1/E",
-                "Actuation/G5/A"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        }
-    ],
-    "assembly_steps": {}
+    "order_constraints": {
+        "default": [
+            "Assemble A _",
+            "Assemble R _"
+        ],
+        "constraints": [
+            {
+                "type": "and",
+                "variables": [
+                    "R/A2"
+                ],
+                "order": [
+                    "Assemble R _",
+                    "Assemble A _"
+                ]
+                
+            }
+        ]
+    },
+    "assembly_steps": {
+        "Assemble A _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble R _": [
+            "R_first_step",
+            "R_second_step"
+        ]
+    }
 }
