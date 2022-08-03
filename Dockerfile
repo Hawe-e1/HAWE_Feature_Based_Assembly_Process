@@ -3,11 +3,10 @@ FROM conda/miniconda3
 RUN conda install -c conda-forge python=3.10 sympy fastapi uvicorn 
 
 COPY ./procgen /assembly-steps-gen/procgen
-COPY main.py /assembly-steps-gen/main.py
+COPY start.sh /assembly-steps-gen/start.sh
 
 WORKDIR /assembly-steps-gen
 
-COPY ./start.sh /start.sh
-RUN chmod +x /start.sh
+RUN chmod +x /assembly-steps-gen/start.sh
 
 CMD ["./start.sh"]
