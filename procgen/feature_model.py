@@ -1,5 +1,6 @@
+import re
 from typing import Dict, List, Set, Tuple
-from procgen import data_types
+from procgen import data_types, utils
 
 import sympy
 import sympy.abc
@@ -146,8 +147,6 @@ class FeatureModel:
     ) -> Dict[str, bool]:
         if root.meta.abstract and root.nodes:
             subs: Dict[str, bool] = {}
-            # if root.meta.mandatory:
-            #    subs.update({parent_name: True})
             for node in root.nodes.values():
                 subs.update(
                     self.extend_bool_spec_from_fm(
@@ -177,8 +176,33 @@ class FeatureModel:
         self, unparsed_spec: data_types.UnparsedSpecificationType
     ) -> data_types.SpecificationType:
         parsed_spec_dict: Dict[str, List[str]] = {}
-        for feat_name, feat_specs in unparsed_spec.features.items():
-            parsed_spec_dict[feat_name] = feat_specs.split(" ")
+        for feature_group, features in unparsed_spec.features.items():
+            node_path = feature_group.split("/")
+            group_node = self.recurse_into_fm(self.root, node_path[1:])
+            if group_node.nodes:
+                feat_names = sorted(
+                    [
+                        possible_node.meta.name
+                        for possible_node in group_node.nodes.values()
+                    ],
+                    key=lambda s: len(s),
+                    reverse=True,
+                )
+                for feat in feat_names:
+                    features_sub_strings = utils.get_all_substrings(features)
+                    for feat_sub in features_sub_strings:
+                        if feat_sub == feat:
+                            if feature_group not in parsed_spec_dict:
+                                parsed_spec_dict[feature_group] = [feat_sub]
+                            else:
+                                parsed_spec_dict[feature_group].append(feat_sub)
+                            features = features.replace(feat_sub, "")
+                            break
+            if features:
+                pass
+                raise ValueError(
+                    "Could not parse type code specification part: " + features
+                )
         return data_types.SpecificationType(features=parsed_spec_dict)
 
     def get_bool_from_spec(

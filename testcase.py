@@ -25,7 +25,7 @@ if __name__ == "__main__":
         }
     )
     spec = procgen.data_types.UnparsedSpecificationType(
-        features={"R/A1": "B1", "R": "A2"}
+        features={"R/A1": "B1B2"}  # , "R": "A2"}
     )
     # spec = procgen.data_types.UnparsedSpecificationType(features={})  # {"A": "B"})
     spec = fm.parse_specification(spec)

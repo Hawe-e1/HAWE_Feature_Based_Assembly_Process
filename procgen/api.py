@@ -8,7 +8,6 @@ app = FastAPI()
 
 @app.post("/check/feature_model")
 async def check_fm(fm_json: data_types.FeatureModelType):
-    sat: bool
     try:
         fm = feature_model.FeatureModel(fm_json)
         sat = fm.check_fm_sat()
@@ -19,12 +18,13 @@ async def check_fm(fm_json: data_types.FeatureModelType):
 
 @app.post("/check/type_code_satisfy")
 async def check_type_code(
-    fm_json: data_types.FeatureModelType, spec: data_types.SpecificationType
+    fm_json: data_types.FeatureModelType, spec: data_types.UnparsedSpecificationType
 ):
     sat: bool
     try:
         fm = feature_model.FeatureModel(fm_json)
-        sat = fm.check_spec_sat(spec)
+        parsed_spec = fm.parse_specification(spec)
+        sat = fm.check_spec_sat(parsed_spec)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Integral error " + str(e))
     return sat
@@ -56,12 +56,13 @@ async def get_feature_group_names(fm_json: data_types.FeatureModelType):
 
 @app.post("/get/assembly_steps")
 async def get_assembly_steps(
-    fm_json: data_types.FeatureModelType, spec: data_types.SpecificationType
+    fm_json: data_types.FeatureModelType, spec: data_types.UnparsedSpecificationType
 ):
     assembly_steps: data_types.AssemblyProcessType
     try:
         fm = feature_model.FeatureModel(fm_json)
-        assembly_steps = fm.get_assembly_process(spec)
+        parsed_spec = fm.parse_specification(spec)
+        assembly_steps = fm.get_assembly_process(parsed_spec)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Integral error " + str(e))
     return assembly_steps

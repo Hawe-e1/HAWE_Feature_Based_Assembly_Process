@@ -8,6 +8,7 @@ class MetaType(BaseModel):
     type: Literal["and"] | Literal["alt"] = "and"
     mandatory: bool = False
     assembly_action: Optional[str]
+    merge_assembly: Optional[str]
     id: str = "0"
     travel: Optional[List[str]]
 

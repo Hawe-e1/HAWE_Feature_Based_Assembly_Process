@@ -17,3 +17,10 @@ def load_json_from_file_path(file_path: str):
 
 def pprint_dict(d, indent: int = 4):
     print(json.dumps(d, sort_keys=True, indent=indent))
+
+
+def get_all_substrings(input_string: str) -> List[str]:
+    length = len(input_string)
+    subs = [input_string[i : j + 1] for i in range(length) for j in range(i, length)]
+    subs = sorted(subs, key=lambda s: len(s), reverse=True)
+    return subs
