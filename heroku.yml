@@ -2,4 +2,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: python main.py
+  web: docker run registry.heroku.com/assembly-steps-gen/web -p 8000:80

@@ -7,4 +7,5 @@ COPY main.py /assembly-steps-gen/main.py
 
 WORKDIR /assembly-steps-gen
 
+
 CMD python main.py
