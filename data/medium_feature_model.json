@@ -2,6 +2,7 @@
     "structure": {
         "Actuation": {
             "meta": {
+                "name": "Actuation",
                 "type": "alt",
                 "abstract": true,
                 "mandatory": true
@@ -9,187 +10,247 @@
             "nodes": {
                 "AG1": {
                     "meta": {
+                        "name": "AG1",
                         "type": "and",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "E": {
-                            "meta": {}
+                            "meta": {
+                                "name": "E",
+                                "assembly_action": "Assemble AG1 _"
+                            }
                         },
                         "E0": {
-                            "meta": {}
+                            "meta": {
+                                "name": "E0",
+                                "assembly_action": "Assemble AG1 _"
+                            }
                         }
                     }
                 },
                 "AG2": {
                     "meta": {
+                        "name": "AG2",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "empty": {
-                            "meta": {}
+                            "meta": {
+                                "name": "P",
+                                "assembly_action": "Assemble AG2 _"
+                            }
                         },
                         "P": {
-                            "meta": {}
+                            "meta": {
+                                "name": "P",
+                                "assembly_action": "Assemble AG2 _"
+                            }
                         }
                     }
                 },
                 "AG3": {
                     "meta": {
+                        "name": "AG3",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "F": {
-                            "meta": {}
+                            "meta": {
+                                "name": "F",
+                                "assembly_action": "Assemble AG3 _"
+                            }
                         },
                         "T": {
-                            "meta": {}
+                            "meta": {
+                                "name": "T",
+                                "assembly_action": "Assemble AG3 _"
+                            }
                         }
                     }
                 },
                 "AG4": {
                     "meta": {
+                        "name": "AG4",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "empty": {
-                            "meta": {}
+                            "meta": {
+                                "name": "Z",
+                                "assembly_action": "Assemble AG4 _"
+                            }
                         },
                         "I": {
-                            "meta": {}
+                            "meta": {
+                                "name": "I",
+                                "assembly_action": "Assemble AG4 _"
+                            }
                         },
                         "M": {
-                            "meta": {}
+                            "meta": {
+                                "name": "M",
+                                "assembly_action": "Assemble AG4 _"
+                            }
                         },
                         "MM": {
-                            "meta": {}
+                            "meta": {
+                                "name": "MM",
+                                "assembly_action": "Assemble AG4 _"
+                            }
                         }
                     }
                 },
                 "AG5": {
                     "meta": {
+                        "name": "AG5",
                         "type": "and",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "D": {
-                            "meta": {}
+                            "meta": {
+                                "name": "D",
+                                "assembly_action": "Assemble AG5 _"
+                            }
                         },
                         "F": {
-                            "meta": {}
+                            "meta": {
+                                "name": "F",
+                                "assembly_action": "Assemble AG5 _"
+                            }
                         }
                     }
                 },
                 "AG6": {
                     "meta": {
+                        "name": "AG6",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "8": {
-                            "meta": {}
+                            "meta": {
+                                "name": "8",
+                                "assembly_action": "Assemble AG6 _"
+                            }
                         },
                         "9": {
-                            "meta": {}
+                            "meta": {
+                                "name": "9",
+                                "assembly_action": "Assemble AG6 _"
+                            }
                         }
                     }
                 },
                 "AG7": {
                     "meta": {
+                        "name": "AG7",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "empty": {
-                            "meta": {}
+                            "meta": {
+                                "name": "X",
+                                "assembly_action": "Assemble AG7 _"
+                            }
                         },
                         "UNF": {
-                            "meta": {}
+                            "meta": {
+                                "name": "UNF",
+                                "assembly_action": "Assemble AG7 _"
+                            }
                         }
                     }
                 },
                 "AG8": {
                     "meta": {
+                        "name": "AG8",
                         "type": "alt",
                         "abstract": true,
                         "mandatory": true
                     },
                     "nodes": {
                         "empty": {
-                            "meta": {}
+                            "meta": {
+                                "name": "Y",
+                                "assembly_action": "Assemble AG8 _"
+                            }
                         },
                         "G": {
-                            "meta": {}
+                            "meta": {
+                                "name": "G",
+                                "assembly_action": "Assemble AG8 _"
+                            }
                         }
                     }
                 }
             }
         }
     },
-    "constraints": [
-    ],
-    "order_constraints": [
-        {
-            "expr": [
-                "and",
-                "Actuation/G1/E0",
-                "Actuation/G8/CAN"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        },
-        {
-            "expr": [
-                "or",
-                "Controller/L",
-                "Controller/I"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        },
-        {
-            "expr": [
-                "and",
-                "Actuation/G1/E",
-                "Actuation/G5/A"
-            ],
-            "order": [
-                7,
-                2,
-                6,
-                1,
-                3,
-                4,
-                5,
-                8
-            ]
-        }
-    ],
-    "assembly_steps": {}
+    "constraints": [],
+    "order_constraints": {
+        "default": [
+            "Assemble AG1 _",
+            "Assemble AG2 _",
+            "Assemble AG3 _",
+            "Assemble AG4 _",
+            "Assemble AG5 _",
+            "Assemble AG6 _",
+            "Assemble AG7 _",
+            "Assemble AG8 _"
+        ],
+        "constraints": [
+            {
+                "type": "and",
+                "variables": [],
+                "order": []
+            }
+        ]
+    },
+    "assembly_steps": {
+        "Assemble AG1 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG2 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG3 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG4 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG5 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG6 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG7 _": [
+            "A_first_step",
+            "A_second_step"
+        ],
+        "Assemble AG8 _": [
+            "A_first_step",
+            "A_second_step"
+        ]
+    }
 }

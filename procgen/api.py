@@ -3,6 +3,7 @@ import procgen.data_types as data_types
 import procgen.feature_model as feature_model
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.concurrency import run_in_threadpool
 
 app = FastAPI()
 
@@ -26,7 +27,7 @@ async def root():
 async def check_fm(fm_json: data_types.FeatureModelType):
     try:
         fm = feature_model.FeatureModel(fm_json)
-        sat = fm.check_fm_sat()
+        sat = await run_in_threadpool(fm.check_fm_sat)
     except Exception as e:
         raise HTTPException(status_code=500, detail="Integral error " + str(e))
     return sat
